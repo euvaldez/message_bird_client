@@ -1,0 +1,20 @@
+{
+    "name": "Application to test sms messages from message bird",
+    "license": "MIT",
+    "type": "project",
+    "description": "This the assignment from message bird. I should build a chat application",
+    "authors": [
+        {
+            "name": "Eunice Valdez",
+            "email": "euvaldez@gmail.com",
+            "role": "Software Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "messagebird/php-rest-api": "^1.6"
+    }
+}
