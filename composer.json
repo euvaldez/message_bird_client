@@ -1,5 +1,5 @@
 {
-    "name": "Application to test sms messages from message bird",
+    "name": "message-bird-client/bird",
     "license": "MIT",
     "type": "project",
     "description": "This the assignment from message bird. I should build a chat application",
@@ -11,7 +11,10 @@
         }
     ],
     "autoload": {
-        "psr-4": { "": "src/" },
+        "psr-4": {
+            "": "src/",
+            "MessageBirdClient\\Component\\": "src/"
+        },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {
