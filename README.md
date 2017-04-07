@@ -1,8 +1,7 @@
 Assignment for Message Bird
 ========================
 
-In this assignment I implement a website where I can send sms messages to my phone using the API
-provided by the company.
+I implement a website where I can send sms messages to any phone using MessageBird API.
 
 What's inside?
 --------------
