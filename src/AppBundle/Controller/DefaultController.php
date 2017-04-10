@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * Action to display the nain page that will submit the message to message bird API.
+     * Action to display the main page that will submit the message to message bird API.
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/bird_messenger", name="homepage")
