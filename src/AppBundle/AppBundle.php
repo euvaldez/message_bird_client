@@ -1,6 +1,5 @@
 <?php
-
-namespace AppBundle;
+namespace MessageBirdClient\AppBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

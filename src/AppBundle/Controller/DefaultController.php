@@ -1,13 +1,11 @@
 <?php
+namespace MessageBirdClient\AppBundle\Controller;
 
-namespace AppBundle\Controller;
-
-use MessageBird\Client;
 use MessageBirdClient\Component\MessageRequest;
 use MessageBirdClient\Component\SendSmsMessage;
+use MessageBirdClient\Component\SmsResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,10 +21,8 @@ class DefaultController extends Controller
      */
     public function sendMessageAction(Request $request)
     {
-        // get the balance
-        $message_bird = new Client('aOoy44PcEROkan2d5dTZCnmEy');
-        $balance      = $message_bird->balance->read();
         $message_bird = new MessageRequest();
+        $send_message = new SendSmsMessage();
 
         $form = $this->createFormBuilder($message_bird)
             ->add('recipients', TextareaType::class)
@@ -37,15 +33,15 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
 
+
         $result = '';
         if ($form->isSubmitted() && $form->isValid()) {
-            $send_message = new SendSmsMessage();
-            $result       = $send_message->sendOneRequest($form->getData());
+            $result = $send_message->sendOneCurlRequest($form->getData());
             dump($result);
         }
 
         return $this->render('default/messengerBird.html.twig', [
-            'balance' => $balance,
+            'balance' => $send_message->getBalance(),
             'form'    => $form->createView(),
             'result'  => $result
         ]);
