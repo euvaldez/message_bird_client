@@ -26,8 +26,8 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($message_bird)
             ->add('recipients', TextareaType::class)
-            ->add('sender', TextType::class)
-            ->add('message', TextareaType::class)
+            ->add('sender', TextType::class, ['required' => false])
+            ->add('message', TextareaType::class, ['required' => false])
             ->add('send', SubmitType::class, ['label' => 'Verzenden'])
             ->getForm();
 
@@ -36,7 +36,7 @@ class DefaultController extends Controller
 
         $result = '';
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $send_message->sendOneCurlRequest($form->getData());
+            $result = $send_message->sendOneRequest($form->getData());
             dump($result);
         }
 

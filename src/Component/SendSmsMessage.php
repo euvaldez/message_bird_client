@@ -99,7 +99,13 @@ class SendSmsMessage
         // send message
         try {
             $result = $this->message_bird->messages->create($message);
-            $this->result->setStatus($result->getStatus());
+            dump($result);
+            $status = '';
+            foreach ($result->recipients->items as $recipient) {
+                $status .= sprintf("%s : %s \n", $recipient->recipient, $recipient->status);
+            }
+
+            $this->result->setStatus($status);
 
         } catch (\Exception $e) {
             $this->result->setStatus($e->getMessage());
@@ -110,7 +116,7 @@ class SendSmsMessage
     }
 
     /**
-     * Store in cache the incomming messages if there are too many.
+     * Store in cache the incoming messages if there are too many.
      */
     public function storeMessageInQueue()
     {

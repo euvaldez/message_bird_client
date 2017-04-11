@@ -1,6 +1,8 @@
 <?php
 namespace MessageBirdClient\Component;
 
+use MessageBirdClient\AppBundle\Validator\Constraints as AcmeAssert;
+
 /**
  * Stores a request to be sent to the client.
  */
@@ -11,18 +13,25 @@ class MessageRequest
     /**
      * Store the recipients of the SMS message.
      * @var string
+     * Specify custom validation rules for the recipient.
+     * @AcmeAssert\DutchTelephone
+     * @AcmeAssert\TelephoneLength
      */
     private $recipients;
 
     /**
      * Store the sender of the SMS.
      * @var string
+     * Specify custom validation rules for the sender.
+     * @AcmeAssert\SenderContent
      */
     private $sender;
 
     /**
      * Store the content of the message itself
      * @var SmsMessage
+     * Specify custom validation rules for the message.
+     * @AcmeAssert\MessageContent
      */
     private $message;
 
