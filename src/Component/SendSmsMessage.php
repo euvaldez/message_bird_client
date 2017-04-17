@@ -94,24 +94,24 @@ class SendSmsMessage
         $message             = new Message();
         $message->originator = $request->getSender();
         $message->recipients = [$request->getRecipients()];
-        $message->body       = $request->getMessage()->getMessage();
 
-        // send message
-        try {
-            $result = $this->message_bird->messages->create($message);
-            dump($result);
-            $status = '';
-            foreach ($result->recipients->items as $recipient) {
-                $status .= sprintf("%s : %s \n", $recipient->recipient, $recipient->status);
+        if ($request->getMessage()->isMessageTooLong()) {
+            // send multiple small messages
+            foreach ($request->getMessage()->getConcatenatedMessage() as $sms_part) {
+                $message             = new Message();
+                $message->originator = $request->getSender();
+                $message->recipients = [$request->getRecipients()];
+                $message->setBinarySms($sms_part->getHeader(), $sms_part->getMessage());
+                // send message
+                $this->sendMessage($message);
             }
 
-            $this->result->setStatus($status);
-
-        } catch (\Exception $e) {
-            $this->result->setStatus($e->getMessage());
-            $this->result->setCode($e->getCode());
+        } else {
+            // send single message
+            $message->body = $request->getMessage()->getMessage();
+            // send message
+            $this->sendMessage($message);
         }
-
         return $this->result;
     }
 
@@ -130,5 +130,27 @@ class SendSmsMessage
     public function getBalance()
     {
         return $this->message_bird->balance->read();
+    }
+
+    /**
+     * Sends the message to the message bird API.
+     * @param Message $message
+     */
+    private function sendMessage($message)
+    {
+        // send message
+        try {
+            $result = $this->message_bird->messages->create($message);
+            dump($result);
+            $status = '';
+            foreach ($result->recipients->items as $recipient) {
+                $status .= sprintf("%s : %s \n", $recipient->recipient, $recipient->status);
+            }
+            $this->result->setStatus($status);
+
+        } catch (\Exception $e) {
+            $this->result->setStatus($e->getMessage());
+            $this->result->setCode($e->getCode());
+        }
     }
 }

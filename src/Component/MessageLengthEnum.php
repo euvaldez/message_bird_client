@@ -7,6 +7,7 @@ namespace MessageBirdClient\Component;
 class MessageLengthEnum
 {
     const MAX_LENGTH = 160;
+    const MIN_AMOUNT_CHARACTERS = 153;
 
     /**
      * Init empty construct because this is just an enum

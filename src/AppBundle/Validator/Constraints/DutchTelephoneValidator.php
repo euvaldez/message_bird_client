@@ -11,11 +11,12 @@ class DutchTelephoneValidator extends ConstraintValidator
 {
     /**
      * {@inheritdoc}
+     * @TODO fix this regex to accept 316 without +. should I?
      */
     public function validate($value, Constraint $constraint)
     {
         if (preg_match
-                ("/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/",
+                ("/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{11}$)/",
                 $value,
                 $matches)
             === 0
