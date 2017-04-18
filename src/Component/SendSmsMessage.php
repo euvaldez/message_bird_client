@@ -1,8 +1,10 @@
 <?php
+
 namespace MessageBirdClient\Component;
 
 use MessageBird\Client;
 use MessageBird\Objects\Message;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -10,6 +12,16 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  */
 class SendSmsMessage
 {
+    /**
+     * Api request can be sent one request per second
+     */
+    const API_REQ_INTERVAL = '1 seconds';
+
+    /**
+     * Name of the reference to the last sms sent to the API
+     */
+    const LAST_SMS_MESSAGE_REFERENCE = 'sms_message.last_message';
+
     /**
      * Url to connect to the API of the client.
      * @var string
@@ -41,17 +53,27 @@ class SendSmsMessage
     private $result;
 
     /**
+     * The cache component that implements PSR-6. Used to store the last succesful result of a sent SMS.
+     *
+     * @var FilesystemAdapter
+     */
+    private $cache;
+
+    /**
      * Initialize some classes.
-     * @TODO move this initialization to the dependency injection container.
+     * @TODO move this initializations to the dependency injection container.
      */
     public function __construct()
     {
         $this->message_bird = new Client($this->production_access_key);
         $this->result       = new SmsResponse();
+        $this->cache        = new FilesystemAdapter();
     }
 
     /**
      * Send curl request to MessageBird API.
+     * @TODO Check what is the exact format.
+     * This one does not work because API does not accept the keyword 'body' or 'message'
      * @param MessageRequest $request
      * @return SmsResponse
      */
@@ -59,15 +81,15 @@ class SendSmsMessage
     {
         $encoded_request = json_encode(
             [
-                'recipients'  => $request->getRecipients(),
+                'recipients' => $request->getRecipients(),
                 'originator' => $request->getSender(),
-                'body'    => $request->getMessage()->getMessage()
+                'body' => $request->getMessage()->getMessage()
             ]
         );
 
         $headers = [
             'Content-Type: application/json',
-            'Authorization: AccessKey '. $this->production_access_key
+            'Authorization: AccessKey ' . $this->testing_access_key
         ];
 
         $curl_handle = curl_init($this->api_url);
@@ -91,36 +113,23 @@ class SendSmsMessage
      */
     public function sendOneRequest(MessageRequest $request)
     {
-        $message             = new Message();
-        $message->originator = $request->getSender();
-        $message->recipients = [$request->getRecipients()];
+        $last_message_sent = $this->cache->getItem(self::LAST_SMS_MESSAGE_REFERENCE);
+        $schedule_message  = $last_message_sent->isHit() ? true : false;
+        dump($last_message_sent);
 
         if ($request->getMessage()->isMessageTooLong()) {
             // send multiple small messages
             foreach ($request->getMessage()->getConcatenatedMessage() as $sms_part) {
-                $message             = new Message();
-                $message->originator = $request->getSender();
-                $message->recipients = [$request->getRecipients()];
-                $message->setBinarySms($sms_part->getHeader(), $sms_part->getMessage());
-                // send message
-                $this->sendMessage($message);
+                $message = $this->buildBirdMessage($request, $schedule_message);
+                $this->sendBirdMessage($message);
             }
 
         } else {
-            // send single message
-            $message->body = $request->getMessage()->getMessage();
-            // send message
-            $this->sendMessage($message);
+            $message = $this->buildBirdMessage($request, $schedule_message);
+            $this->sendBirdMessage($message);
+
         }
         return $this->result;
-    }
-
-    /**
-     * Store in cache the incoming messages if there are too many.
-     */
-    public function storeMessageInQueue()
-    {
-        // if too many requests come store them here to send it later
     }
 
     /**
@@ -129,14 +138,31 @@ class SendSmsMessage
      */
     public function getBalance()
     {
-        return $this->message_bird->balance->read();
+        try {
+            $balance = $this->message_bird->balance->read();
+            return $balance->amount;
+        } catch (\Exception $e) {
+            return "Op dit momeent de SMS dienst is niet beschikbaar. Probeer later nogmaals";
+        }
     }
 
     /**
-     * Sends the message to the message bird API.
+     * Store in cache the result form the last sent message. It will expire after 1 sec and then it will be deleted.
+     * @param Message $result
+     */
+    private function storeResponseInCache(Message $result)
+    {
+        $cached_request = $this->cache->getItem(self::LAST_SMS_MESSAGE_REFERENCE);
+        $cached_request->set($result);
+        $cached_request->expiresAfter(\DateInterval::createFromDateString(self::API_REQ_INTERVAL));
+        $this->cache->save($cached_request);
+    }
+
+    /**
+     * Sends the message to the bird API.
      * @param Message $message
      */
-    private function sendMessage($message)
+    private function sendBirdMessage(Message $message)
     {
         // send message
         try {
@@ -147,10 +173,31 @@ class SendSmsMessage
                 $status .= sprintf("%s : %s \n", $recipient->recipient, $recipient->status);
             }
             $this->result->setStatus($status);
+            $this->storeResponseInCache($result);
 
         } catch (\Exception $e) {
             $this->result->setStatus($e->getMessage());
             $this->result->setCode($e->getCode());
         }
+    }
+
+    /**
+     * Builds a message bird object to be sent via the API.
+     *
+     * @param MessageRequest $request
+     * @param boolean        $schedule_message
+     * @return Message
+     */
+    private function buildBirdMessage(MessageRequest $request, $schedule_message)
+    {
+        $message             = new Message();
+        $message->originator = $request->getSender();
+        $message->recipients = [$request->getRecipients()];
+        $message->body       = $request->getMessage()->getMessage();
+        $little_later        = new \DateTime();
+        $little_later->add(\DateInterval::createFromDateString(self::API_REQ_INTERVAL));
+        $message->scheduledDatetime = $schedule_message ? $little_later->format('Y-m-d H:i:s') : null;
+
+        return $message;
     }
 }

@@ -21,6 +21,7 @@ class DefaultController extends Controller
      */
     public function sendMessageAction(Request $request)
     {
+        //@TODO move this initializations to the dependency injection container
         $message_bird = new MessageRequest();
         $send_message = new SendSmsMessage();
 
@@ -33,11 +34,9 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
 
-
         $result = '';
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $send_message->sendOneRequest($form->getData());
-            dump($result);
         }
 
         return $this->render('default/messengerBird.html.twig', [
