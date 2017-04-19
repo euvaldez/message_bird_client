@@ -5,7 +5,9 @@
     <h2>Balance: {{ balance }}</h2>
     <div><h1>Voer je bericht in</h1></div>
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.recipients) }}
+        {{ form_row(form.sender) }}
+        {{ form_row(form.message) }}
         {{ form_end(form) }}
         {{ dump(result) }}
 </div>
@@ -38,48 +40,59 @@
     }
 
     form {
-    max-width: 600px;
-    text-align: center;
-    margin: 20px auto;
+        max-width: 800px;
+        text-align: center;
+        margin: 20px auto;
 
     input, textarea {
-    border:0; outline:0;
-    padding: 1em;
-    @include border-radius(8px);
-    display: block;
-    width: 100%;
-    margin-top: 1em;
-    font-family: 'Merriweather', sans-serif;
-    @include box-shadow(0 1px 1px rgba(black, 0.1));
-    resize: none;
-
+        border: 0;
+        outline: 0;
+        padding: 1em;
+    @include border-radius(8 px);
+        display: block;
+        width: 100%;
+        margin-top: 1em;
+        font-family: 'Merriweather', sans-serif;
+    @include box-shadow(0 1 px 1 px rgba(black, 0.1));
+        resize: none;
 
     &:focus {
-    @include box-shadow(0 0px 2px rgba($red, 1)!important);
+    @include box-shadow(0 0 px 2 px rgba($ red, 1) !important);
     }
     }
 
-    input[type="submit"] {
-    color: white;
-    background: $red;
-    cursor: pointer;
+    button#form_send[type="submit"] {
+        color: white;
+        border: none;
+        background: #008CBA;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
 
     &:hover {
-    @include box-shadow(0 1px 1px 1px rgba(#aaa, 0.6));
+    @include box-shadow(0 1 px 1 px 1 px rgba(#aaa, 0.6));
     }
+
     }
 
     .half {
-    float:left; margin-bottom:1em; width:48%;
+        float: left;
+        margin-bottom: 1em;
+        width: 48%;
 
     @media (max-width: 480px) {
-    .half {
-    width: 100%;
-    float: none;
-    margin-bottom: 0;
-    }
+        .half {
+            width: 100%;
+            float: none;
+            margin-bottom: 0;
+        }
     }
 
+    }
+    }
     /* Clearfix */
     .cf:before,
     .cf:after {

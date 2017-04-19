@@ -26,9 +26,9 @@ class DefaultController extends Controller
         $send_message = new SendSmsMessage();
 
         $form = $this->createFormBuilder($message_bird)
-            ->add('recipients', TextareaType::class)
-            ->add('sender', TextType::class, ['required' => false])
-            ->add('message', TextareaType::class, ['required' => false])
+            ->add('recipients', TextareaType::class, ['label' => 'Ontvangers'])
+            ->add('sender', TextType::class, ['required' => false, 'label' => 'Afzender'])
+            ->add('message', TextareaType::class, ['required' => false, 'label' => 'Bericht'])
             ->add('send', SubmitType::class, ['label' => 'Verzenden'])
             ->getForm();
 

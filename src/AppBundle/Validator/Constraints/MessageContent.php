@@ -8,5 +8,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class MessageContent extends Constraint
 {
-    public $message = 'Leeg bericht "%string%". Voer je message in.';
+    public $message = 'Leeg bericht "%string%". Voer je bericht in.';
 }

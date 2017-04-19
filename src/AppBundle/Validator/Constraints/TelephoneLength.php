@@ -8,5 +8,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class TelephoneLength extends Constraint
 {
-    public $message = 'Telefoon nummer "%string%" is te kort of te lang.';
+    public $message = 'Telefoonnummer "%string%" is te kort of te lang.';
 }

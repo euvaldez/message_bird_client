@@ -142,7 +142,7 @@ class SendSmsMessage
             $balance = $this->message_bird->balance->read();
             return $balance->amount;
         } catch (\Exception $e) {
-            return "Op dit momeent de SMS dienst is niet beschikbaar. Probeer later nogmaals";
+            return "Op dit moment is de SMS dienst niet beschikbaar. Probeer later nogmaals";
         }
     }
 

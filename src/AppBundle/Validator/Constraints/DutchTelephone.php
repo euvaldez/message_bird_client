@@ -8,6 +8,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class DutchTelephone extends Constraint
 {
-    public $message = 'De telefoon nummer "%string%" heeft niet de juiste format. '
-    . 'Een nederlandse telefoon nummer is verwacht';
+    public $message = 'Het telefoonnummer "%string%" heeft niet de juiste format. '
+    . 'Een Nederlands telefoonnummer wordt verwacht';
 }
