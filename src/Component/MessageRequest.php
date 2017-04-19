@@ -12,7 +12,7 @@ class MessageRequest
 
     /**
      * Store the recipients of the SMS message.
-     * @var string
+     * @var string[]
      * Specify custom validation rules for the recipient.
      * @AcmeAssert\DutchTelephone
      * @AcmeAssert\TelephoneLength
@@ -36,12 +36,17 @@ class MessageRequest
     private $message;
 
     /**
-     * @param int $recipients
-     * @TODO this should be an array of recipients.
+     * @param string $recipients
      */
     public function setRecipients($recipients)
     {
-        $this->recipients = $recipients;
+        $this->recipients = explode(',', trim($recipients));
+        $this->recipients = array_map(
+            function ($recipient) {
+                return trim($recipient);
+            },
+            $this->recipients
+        );
     }
 
     /**
@@ -73,7 +78,7 @@ class MessageRequest
      */
     public function getRecipients()
     {
-        return intval($this->recipients);
+        return $this->recipients;
     }
 
     /**

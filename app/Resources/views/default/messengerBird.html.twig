@@ -9,8 +9,8 @@
         {{ form_row(form.sender) }}
         {{ form_row(form.message) }}
         {{ form_end(form) }}
-        {{ dump(result) }}
 </div>
+    <div class="result">{{ result.status }}</div>
 {% endblock %}
 
 {% block stylesheets %}
@@ -119,5 +119,10 @@
     @include box-shadow(0 1px 1px rgba(black, 0.1));
         resize: none;
     }
+        .result {
+            text-align: center;
+            color: #6897BB;
+            padding: 2em;
+        }
     </style>
 {% endblock %}

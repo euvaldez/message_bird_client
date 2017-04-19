@@ -16,8 +16,11 @@ class TelephoneLengthValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (strlen($value) < self::MIN_LENGTH || strlen($value) > self::MAX_LENGTH) {
-            $this->context->buildViolation($constraint->message)->setParameter('%string%', $value)->addViolation();
+        foreach ($value as $phone) {
+            if (strlen($phone) < self::MIN_LENGTH || strlen($phone) > self::MAX_LENGTH) {
+                $this->context->buildViolation($constraint->message)->setParameter('%string%', $phone)->addViolation();
+            }
+            break;
         }
     }
 }

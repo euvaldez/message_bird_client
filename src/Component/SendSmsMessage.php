@@ -192,7 +192,7 @@ class SendSmsMessage
     {
         $message             = new Message();
         $message->originator = $request->getSender();
-        $message->recipients = [$request->getRecipients()];
+        $message->recipients = $request->getRecipients();
         $message->body       = $request->getMessage()->getMessage();
         $little_later        = new \DateTime();
         $little_later->add(\DateInterval::createFromDateString(self::API_REQ_INTERVAL));
