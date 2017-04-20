@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e85071651160a0fddba8206d3b176fd3",
+    "content-hash": "7c958617e57a2d8e257f1533fc31c741",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -833,6 +833,91 @@
                 "orm"
             ],
             "time": "2016-12-18T15:42:34+00:00"
+        },
+        {
+            "name": "hostnet/path-composer-plugin-lib",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hostnet/path-composer-plugin-lib.git",
+                "reference": "b6f3462b2e05ebb77c3b59bac497548ee90d9c32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hostnet/path-composer-plugin-lib/zipball/b6f3462b2e05ebb77c3b59bac497548ee90d9c32",
+                "reference": "b6f3462b2e05ebb77c3b59bac497548ee90d9c32",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "composer/composer": "@alpha",
+                "phpunit/phpunit": "^5.2",
+                "squizlabs/php_codesniffer": "^2.5"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Hostnet\\Component\\Path\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hostnet\\Component\\Path\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hidde Boomsma",
+                    "email": "hboomsma@hostnet.nl"
+                }
+            ],
+            "description": "Publish vendor_dir and base_dir as constants",
+            "time": "2016-10-17T06:49:19+00:00"
+        },
+        {
+            "name": "hostnet/phpcs-tool",
+            "version": "5.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hostnet/phpcs-tool.git",
+                "reference": "4023c902b14a661e1667742e15b14f70337bd3af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/4023c902b14a661e1667742e15b14f70337bd3af",
+                "reference": "4023c902b14a661e1667742e15b14f70337bd3af",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0.0",
+                "hostnet/path-composer-plugin-lib": "^1.0.2",
+                "php": ">=7.0",
+                "squizlabs/php_codesniffer": "^2.8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.3.2",
+                "phpunit/phpunit": "^6.0.6"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Hostnet\\Component\\CodeSniffer\\Installer"
+            },
+            "autoload": {
+                "psr-0": {
+                    "Hostnet": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. Hostnet version",
+            "time": "2017-03-17T13:57:07+00:00"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2665,6 +2750,84 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2017-03-31T14:50:32+00:00"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "bin": [
+                "scripts/phpcs",
+                "scripts/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "CodeSniffer.php",
+                    "CodeSniffer/CLI.php",
+                    "CodeSniffer/Exception.php",
+                    "CodeSniffer/File.php",
+                    "CodeSniffer/Fixer.php",
+                    "CodeSniffer/Report.php",
+                    "CodeSniffer/Reporting.php",
+                    "CodeSniffer/Sniff.php",
+                    "CodeSniffer/Tokens.php",
+                    "CodeSniffer/Reports/",
+                    "CodeSniffer/Tokenizers/",
+                    "CodeSniffer/DocGenerators/",
+                    "CodeSniffer/Standards/AbstractPatternSniff.php",
+                    "CodeSniffer/Standards/AbstractScopeSniff.php",
+                    "CodeSniffer/Standards/AbstractVariableSniff.php",
+                    "CodeSniffer/Standards/IncorrectPatternException.php",
+                    "CodeSniffer/Standards/Generic/Sniffs/",
+                    "CodeSniffer/Standards/MySource/Sniffs/",
+                    "CodeSniffer/Standards/PEAR/Sniffs/",
+                    "CodeSniffer/Standards/PSR1/Sniffs/",
+                    "CodeSniffer/Standards/PSR2/Sniffs/",
+                    "CodeSniffer/Standards/Squiz/Sniffs/",
+                    "CodeSniffer/Standards/Zend/Sniffs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2017-03-01T22:17:45+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

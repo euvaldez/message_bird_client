@@ -16,18 +16,11 @@ class DutchTelephoneValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         foreach ($value as $phone) {
-            dump("validating: ". $phone);
-            dump(preg_match
-            (
+            if (preg_match(
                 "/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{11}$)/",
                 $phone,
-                $matches));
-            dump($matches);
-            if (preg_match
-                (
-                    "/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{11}$)/",
-                    $phone,
-                    $matches)
+                $matches
+            )
                 === 0
             ) {
                 $this->context->buildViolation($constraint->message)->setParameter('%string%', $phone)->addViolation();

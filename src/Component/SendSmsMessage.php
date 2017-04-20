@@ -1,5 +1,4 @@
 <?php
-
 namespace MessageBirdClient\Component;
 
 use MessageBird\Client;
@@ -115,7 +114,6 @@ class SendSmsMessage
     {
         $last_message_sent = $this->cache->getItem(self::LAST_SMS_MESSAGE_REFERENCE);
         $schedule_message  = $last_message_sent->isHit() ? true : false;
-        dump($last_message_sent);
 
         if ($request->getMessage()->isMessageTooLong()) {
             // send multiple small messages
@@ -123,11 +121,9 @@ class SendSmsMessage
                 $message = $this->buildBirdMessage($request, $schedule_message);
                 $this->sendBirdMessage($message);
             }
-
         } else {
             $message = $this->buildBirdMessage($request, $schedule_message);
             $this->sendBirdMessage($message);
-
         }
         return $this->result;
     }
@@ -174,7 +170,6 @@ class SendSmsMessage
             }
             $this->result->setStatus($status);
             $this->storeResponseInCache($result);
-
         } catch (\Exception $e) {
             $this->result->setStatus($e->getMessage());
             $this->result->setCode($e->getCode());

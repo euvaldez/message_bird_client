@@ -2,7 +2,6 @@
 /**
  * @copyright 2017 Eunice Valdez.
  */
-declare(strict_types=1);
 namespace MessageBirdClient\Component;
 
 use PHPUnit\Framework\TestCase;
