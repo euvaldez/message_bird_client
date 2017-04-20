@@ -115,10 +115,11 @@ class SendSmsMessage
         $last_message_sent = $this->cache->getItem(self::LAST_SMS_MESSAGE_REFERENCE);
         $schedule_message  = $last_message_sent->isHit() ? true : false;
 
+        dump($request->getMessage()->isMessageTooLong());
         if ($request->getMessage()->isMessageTooLong()) {
             // send multiple small messages
             foreach ($request->getMessage()->getConcatenatedMessage() as $sms_part) {
-                $message = $this->buildBirdMessage($request, $schedule_message);
+                $message = $this->buildBirdMessage($request, $schedule_message, $sms_part, true);
                 $this->sendBirdMessage($message);
             }
         } else {
@@ -179,17 +180,27 @@ class SendSmsMessage
     /**
      * Builds a message bird object to be sent via the API.
      *
-     * @param MessageRequest $request
-     * @param boolean        $schedule_message
+     * @param MessageRequest         $request
+     * @param boolean                $schedule_message
+     * @param SmsConcatenatedMessage $binary_message
+     * @param boolean                $is_binary_message
      * @return Message
      */
-    private function buildBirdMessage(MessageRequest $request, $schedule_message)
-    {
+    private function buildBirdMessage(
+        MessageRequest         $request,
+        /* boolean */          $schedule_message,
+        SmsConcatenatedMessage $binary_message = null,
+        /* boolean */          $is_binary_message = false
+    ) {
         $message             = new Message();
         $message->originator = $request->getSender();
         $message->recipients = $request->getRecipients();
-        $message->body       = $request->getMessage()->getMessage();
-        $little_later        = new \DateTime();
+        if ($is_binary_message) {
+            $message->setBinarySms($binary_message->getHeader(), $binary_message->getMessage());
+        } else {
+            $message->body = $request->getMessage()->getMessage();
+        }
+        $little_later = new \DateTime();
         $little_later->add(\DateInterval::createFromDateString(self::API_REQ_INTERVAL));
         $message->scheduledDatetime = $schedule_message ? $little_later->format('Y-m-d H:i:s') : null;
 

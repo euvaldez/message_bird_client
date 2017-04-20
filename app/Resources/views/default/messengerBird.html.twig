@@ -10,7 +10,9 @@
         {{ form_row(form.message) }}
         {{ form_end(form) }}
 </div>
-    <div class="result">{{ result.status }}</div>
+    {% if result %}
+        <div class="result">{{ result.status }}</div>
+    {% endif %}
 {% endblock %}
 
 {% block stylesheets %}
